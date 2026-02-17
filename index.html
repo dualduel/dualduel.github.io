@@ -1,102 +1,162 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>My Life Progress</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Website</title>
     <style>
-        /* MINIMALIST STYLING */
+        /* COLOR PALETTE & TYPOGRAPHY */
+        :root {
+            --bg-color: #151412;       /* Very dark brown/black */
+            --text-color: #e8e4dc;     /* Off-white/cream */
+            --accent-color: #e6b741;   /* Gold/Yellow */
+            --dim-color: #4a4842;      /* Dim gray for empty progress */
+        }
+
         body {
-            font-family: "Courier New", Courier, monospace; /* The typewriter look */
-            background-color: #ffffff;
-            color: #000000;
-            max-width: 600px;
-            margin: 100px auto; /* Centers the content */
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Courier New', Courier, monospace;
+            max-width: 850px;
+            margin: 60px auto;
             padding: 20px;
-            line-height: 1.6;
+            line-height: 1.7;
+            font-size: 15px;
         }
 
-        h1 {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .subtitle {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 40px;
-        }
-
-        /* THE PROGRESS BAR CONTAINER */
-        .progress-container {
-            width: 100%;
-            background-color: #eee; /* Light gray background */
-            height: 25px;
-            border: 1px solid #000;
-            margin-top: 20px;
-        }
-
-        /* THE MOVING PART */
-        .progress-bar {
-            height: 100%;
-            background-color: #000; /* Black fill */
-            width: 0%; /* JS will change this */
-            transition: width 1s ease-in-out;
-        }
-
-        .stats {
-            margin-top: 10px;
-            font-size: 12px;
+        /* HEADER & LIFE BAR */
+        .header-container {
             display: flex;
-            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .site-title {
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+            padding: 5px 15px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .life-bar-container {
+            font-weight: bold;
+            letter-spacing: 2px;
+            font-size: 18px;
+        }
+
+        .life-bar-lived { color: var(--accent-color); }
+        .life-bar-left { color: var(--dim-color); }
+
+        /* NAVIGATION BAR */
+        .nav-links {
+            margin-bottom: 40px;
+            font-size: 16px;
+        }
+
+        .nav-links a {
+            color: var(--accent-color);
+            text-decoration: underline;
+            margin-right: 15px;
+        }
+        
+        .nav-links span {
+            margin-right: 15px;
+        }
+
+        /* MAIN CONTENT BOX */
+        .content-box {
+            border: 1px solid var(--accent-color);
+            padding: 40px;
+        }
+
+        .content-box h2 {
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+
+        a {
+            color: var(--accent-color);
+            text-decoration: underline;
+        }
+
+        /* Responsive tweak for mobile */
+        @media (max-width: 600px) {
+            .content-box { padding: 20px; }
+            .site-title { margin-bottom: 10px; }
         }
     </style>
 </head>
 <body>
 
-    <h1>John Doe</h1>
-    <div class="subtitle">Writer. Coder. Human.</div>
-
-    <p>Welcome to my digital garden. This is where I document my journey.</p>
-    
-    <br>
-    
-    <p><strong>Life Progress (75 Year Target):</strong></p>
-    <div class="progress-container">
-        <div class="progress-bar" id="myBar"></div>
+    <div class="header-container">
+        <div class="site-title">YourName vs The World</div>
+        <div class="life-bar-container" id="asciiBar" title="Life Progress Bar (75 Years)">
+            </div>
     </div>
-    <div class="stats">
-        <span id="percentageText">0%</span>
-        <span>Target: 75 Years</span>
+
+    <div class="nav-links">
+        <span>💻</span> 
+        <span>🐤</span> 
+        <a href="#">/blog</a> 
+        <a href="#">/notes</a> 
+        <a href="#">/about</a> 
+        <a href="#">/archives</a> 
+        <a href="#">/fun</a>
+    </div>
+
+    <div class="content-box">
+        <p>Greetings, Earthling 🖖</p>
+        
+        <h2>I'm [YOUR NAME], aka [NICKNAME].</h2>
+
+        <p>Your friendly neighborhood co-inhabitant of this tiny speck of dust, I maintain this site as a stochastic log of my calculations towards the futile aim of weeding out the anomalies from the equation that gives me my "42".</p>
+
+        <p>In my Clark Kent mode, I spend my day at [Your Job/School], trying to crunch through data and understand the world a little bit better.</p>
+
+        <p>Before that, I spent time tinkering with <a href="#">coding</a>, operating systems, and building things no one wants.</p>
+
+        <p>Do check out some of the <a href="#">other subdomains</a> that I run.</p>
     </div>
 
     <script>
         // --- CUSTOMIZE THIS DATE! ---
-        const birthDate = new Date("1998-11-02"); // YYYY-MM-DD
+        const birthDate = new Date("1995-06-15"); // Format: YYYY-MM-DD
         const lifeExpectancyYears = 75;
+        const totalBars = 50; // Total number of '|' characters to show
         // -----------------------------
 
-        function updateBar() {
+        function renderAsciiBar() {
             const today = new Date();
-            
-            // Calculate total days in 75 years (roughly)
             const totalDays = lifeExpectancyYears * 365.25;
+            const daysLived = (today - birthDate) / (1000 * 60 * 60 * 24);
             
-            // Calculate days lived
-            const timeDiff = today - birthDate;
-            const daysLived = timeDiff / (1000 * 60 * 60 * 24);
-            
-            // Calculate percentage
-            let percentage = (daysLived / totalDays) * 100;
-            
-            // Don't let it go over 100% (hopefully!)
-            if (percentage > 100) percentage = 100;
+            let percentage = (daysLived / totalDays);
+            if (percentage > 1) percentage = 1;
+            if (percentage < 0) percentage = 0;
 
-            // Update the HTML
-            document.getElementById("myBar").style.width = percentage.toFixed(4) + "%";
-            document.getElementById("percentageText").innerText = percentage.toFixed(4) + "% lived";
+            const filledBarsCount = Math.floor(percentage * totalBars);
+            const emptyBarsCount = totalBars - filledBarsCount;
+
+            const filledBars = "|".repeat(filledBarsCount);
+            const emptyBars = "|".repeat(emptyBarsCount);
+
+            const displayPercentage = (percentage * 100).toFixed(4);
+
+            document.getElementById("asciiBar").innerHTML = 
+                `<span class="life-bar-lived">${filledBars}</span>` + 
+                `<span class="life-bar-left">${emptyBars}</span>`;
+            
+            // Adds a hover effect to see the exact percentage
+            document.getElementById("asciiBar").title = `Life Progress: ${displayPercentage}% of 75 years`;
         }
 
-        updateBar();
+        renderAsciiBar();
     </script>
 
 </body>
