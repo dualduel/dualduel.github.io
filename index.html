@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Life Progress</title>
+    <style>
+        /* MINIMALIST STYLING */
+        body {
+            font-family: "Courier New", Courier, monospace; /* The typewriter look */
+            background-color: #ffffff;
+            color: #000000;
+            max-width: 600px;
+            margin: 100px auto; /* Centers the content */
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        h1 {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 40px;
+        }
+
+        /* THE PROGRESS BAR CONTAINER */
+        .progress-container {
+            width: 100%;
+            background-color: #eee; /* Light gray background */
+            height: 25px;
+            border: 1px solid #000;
+            margin-top: 20px;
+        }
+
+        /* THE MOVING PART */
+        .progress-bar {
+            height: 100%;
+            background-color: #000; /* Black fill */
+            width: 0%; /* JS will change this */
+            transition: width 1s ease-in-out;
+        }
+
+        .stats {
+            margin-top: 10px;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>John Doe</h1>
+    <div class="subtitle">Writer. Coder. Human.</div>
+
+    <p>Welcome to my digital garden. This is where I document my journey.</p>
+    
+    <br>
+    
+    <p><strong>Life Progress (75 Year Target):</strong></p>
+    <div class="progress-container">
+        <div class="progress-bar" id="myBar"></div>
+    </div>
+    <div class="stats">
+        <span id="percentageText">0%</span>
+        <span>Target: 75 Years</span>
+    </div>
+
+    <script>
+        // --- CUSTOMIZE THIS DATE! ---
+        const birthDate = new Date("1998-11-02"); // YYYY-MM-DD
+        const lifeExpectancyYears = 75;
+        // -----------------------------
+
+        function updateBar() {
+            const today = new Date();
+            
+            // Calculate total days in 75 years (roughly)
+            const totalDays = lifeExpectancyYears * 365.25;
+            
+            // Calculate days lived
+            const timeDiff = today - birthDate;
+            const daysLived = timeDiff / (1000 * 60 * 60 * 24);
+            
+            // Calculate percentage
+            let percentage = (daysLived / totalDays) * 100;
+            
+            // Don't let it go over 100% (hopefully!)
+            if (percentage > 100) percentage = 100;
+
+            // Update the HTML
+            document.getElementById("myBar").style.width = percentage.toFixed(4) + "%";
+            document.getElementById("percentageText").innerText = percentage.toFixed(4) + "% lived";
+        }
+
+        updateBar();
+    </script>
+
+</body>
+</html>
