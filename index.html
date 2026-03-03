@@ -1,315 +1,1007 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Art & Science of PMM</title>
-    <style>
-        /* --- GLOBAL & NEUTRAL STATE --- */
-        :root {
-            --bg-neutral: #fafafa;
-            --text-neutral: #1a1a1a;
-            --font-neutral: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            --transition-speed: 0.5s;
-        }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Portfolio — Product Marketing</title>
 
-        body {
-            background-color: var(--bg-neutral);
-            color: var(--text-neutral);
-            font-family: var(--font-neutral);
-            transition: background-color var(--transition-speed), color var(--transition-speed);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
-        .container {
-            max-width: 900px;
-            width: 90%;
-            margin: 80px auto;
-            position: relative;
-        }
+<style>
+  /* ─── RESET & BASE ─── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  :root {
+    --bg: #0c0b09;
+    --surface: #141310;
+    --border: rgba(255,255,255,0.08);
 
-        /* --- THE SCIENCE STATE --- */
-        body.theme-science {
-            background-color: #0d1117;
-            color: #58a6ff;
-            font-family: 'Consolas', 'Courier New', monospace;
-            background-image: 
-                linear-gradient(rgba(88, 166, 255, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(88, 166, 255, 0.05) 1px, transparent 1px);
-            background-size: 30px 30px;
-        }
+    /* ART palette */
+    --art-primary: #e8875a;
+    --art-secondary: #c4a882;
+    --art-text: #f5ede3;
+    --art-muted: rgba(245,237,227,0.45);
+    --art-card: rgba(232,135,90,0.06);
+    --art-glow: rgba(232,135,90,0.15);
 
-        body.theme-science .case-card {
-            background: #161b22;
-            border: 1px solid #30363d;
-            box-shadow: 4px 4px 0 rgba(88, 166, 255, 0.1);
-        }
+    /* SCIENCE palette */
+    --sci-primary: #38e8c0;
+    --sci-secondary: #7eb8f7;
+    --sci-text: #ddf4ef;
+    --sci-muted: rgba(221,244,239,0.45);
+    --sci-card: rgba(56,232,192,0.05);
+    --sci-glow: rgba(56,232,192,0.12);
 
-        body.theme-science .section-title {
-            border-bottom: 2px dashed #30363d;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
+    --mode: art;
+    --accent: var(--art-primary);
+    --accent2: var(--art-secondary);
+    --fg: var(--art-text);
+    --muted: var(--art-muted);
+    --card-bg: var(--art-card);
+    --glow: var(--art-glow);
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body: 'DM Sans', sans-serif;
+    --font-mono: 'DM Mono', monospace;
 
-        /* --- THE ART STATE --- */
-        body.theme-art {
-            background-color: #fdfbf7;
-            color: #2c2826;
-            font-family: 'Georgia', 'Times New Roman', serif;
-        }
+    --transition-slow: 0.7s cubic-bezier(0.4,0,0.2,1);
+    --transition-med: 0.4s cubic-bezier(0.4,0,0.2,1);
+    --transition-fast: 0.2s ease;
+  }
 
-        body.theme-art .case-card {
-            background: #fff;
-            border: none;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            border-radius: 4px;
-        }
+  body.science-mode {
+    --accent: var(--sci-primary);
+    --accent2: var(--sci-secondary);
+    --fg: var(--sci-text);
+    --muted: var(--sci-muted);
+    --card-bg: var(--sci-card);
+    --glow: var(--sci-glow);
+    --font-display: 'DM Mono', monospace;
+  }
 
-        body.theme-art .section-title {
-            font-style: italic;
-            border-bottom: 1px solid #e0dcd3;
-        }
+  html { scroll-behavior: smooth; }
 
-        /* --- HEADER & TYPOGRAPHY --- */
-        header {
-            text-align: center;
-            margin-bottom: 60px;
-        }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.7;
+    transition: color var(--transition-slow), background var(--transition-slow);
+    overflow-x: hidden;
+    cursor: none;
+  }
 
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
+  /* ─── CURSOR ─── */
+  #cursor {
+    position: fixed;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%,-50%);
+    transition: width 0.2s, height 0.2s, background var(--transition-slow);
+    mix-blend-mode: screen;
+  }
+  #cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1.5px solid var(--accent);
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%,-50%);
+    transition: width 0.4s ease, height 0.4s ease, border-color var(--transition-slow);
+    opacity: 0.5;
+  }
 
-        .intro-text {
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin: 0 auto;
-            line-height: 1.8;
-            opacity: 0.8;
-        }
+  /* ─── NOISE OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.025;
+    pointer-events: none;
+    z-index: 0;
+  }
 
-        .section-title {
-            font-size: 1.8rem;
-            margin-bottom: 40px;
-            padding-bottom: 15px;
-            text-align: center;
-        }
+  /* ─── LAYOUT ─── */
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 2.5rem; }
+  section { position: relative; z-index: 1; }
 
-        /* --- TOGGLE UI --- */
-        .controls {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 30px;
-            margin: 40px 0 60px 0;
-            padding: 20px;
-            background: rgba(128, 128, 128, 0.05);
-            border-radius: 50px;
-        }
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.5rem 2.5rem;
+    display: flex; align-items: center; justify-content: space-between;
+    background: linear-gradient(to bottom, rgba(12,11,9,0.95), transparent);
+    backdrop-filter: blur(12px);
+  }
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--fg);
+    letter-spacing: 0.01em;
+    transition: font-family var(--transition-slow), color var(--transition-slow);
+  }
+  .nav-logo span { color: var(--accent); transition: color var(--transition-slow); }
+  .nav-links {
+    display: flex; gap: 2.5rem; list-style: none;
+  }
+  .nav-links a {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+  .nav-links a:hover { color: var(--accent); }
 
-        .toggle-btn {
-            background: none;
-            border: none;
-            font-size: 1.1rem;
-            cursor: pointer;
-            color: inherit;
-            opacity: 0.4;
-            transition: all 0.3s;
-            font-family: inherit;
-            padding: 10px 20px;
-            border-radius: 30px;
-        }
+  /* ─── HERO ─── */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 8rem 0 5rem;
+    overflow: hidden;
+  }
+  .hero-inner { max-width: 1100px; margin: 0 auto; padding: 0 2.5rem; }
 
-        .toggle-btn:hover {
-            opacity: 0.8;
-        }
+  .hero-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 0.75rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.1s ease forwards;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 32px; height: 1px;
+    background: var(--accent);
+  }
 
-        .toggle-btn.active {
-            opacity: 1;
-            font-weight: bold;
-            background: rgba(128, 128, 128, 0.1);
-        }
+  .hero-headline {
+    font-family: var(--font-display);
+    font-size: clamp(3.2rem, 7vw, 6.5rem);
+    font-weight: 900;
+    line-height: 1.0;
+    color: var(--fg);
+    margin-bottom: 2rem;
+    letter-spacing: -0.02em;
+    transition: font-family var(--transition-slow), color var(--transition-slow);
+    opacity: 0;
+    animation: fadeUp 0.9s 0.25s ease forwards;
+  }
+  .hero-headline em {
+    font-style: italic;
+    color: var(--accent);
+    display: block;
+    transition: color var(--transition-slow);
+  }
 
-        /* --- CONTENT GRIDS --- */
-        .content-panel {
-            display: none;
-            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
+  .hero-sub {
+    max-width: 520px;
+    font-size: 1.05rem;
+    font-weight: 300;
+    color: var(--muted);
+    margin-bottom: 3rem;
+    line-height: 1.8;
+    opacity: 0;
+    animation: fadeUp 1s 0.4s ease forwards;
+    transition: color var(--transition-slow);
+  }
 
-        .content-panel.active {
-            display: block;
-        }
+  .hero-cta-group {
+    display: flex; gap: 1rem; align-items: center;
+    opacity: 0;
+    animation: fadeUp 1s 0.55s ease forwards;
+  }
+  .btn {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.9rem 2rem;
+    border-radius: 2px;
+    cursor: none;
+    transition: all var(--transition-fast);
+    text-decoration: none;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: var(--bg);
+    border: 1.5px solid var(--accent);
+    font-weight: 500;
+    transition: background var(--transition-slow), border-color var(--transition-slow), transform 0.15s;
+  }
+  .btn-primary:hover { transform: translateY(-2px); opacity: 0.9; }
+  .btn-ghost {
+    background: transparent;
+    color: var(--muted);
+    border: 1.5px solid var(--border);
+  }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-        }
+  /* Floating accent shape */
+  .hero-shape {
+    position: absolute;
+    right: -80px; top: 50%;
+    transform: translateY(-50%);
+    width: 420px; height: 420px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--glow) 0%, transparent 70%);
+    pointer-events: none;
+    transition: background var(--transition-slow);
+    animation: pulse 6s ease-in-out infinite;
+  }
 
-        .case-card {
-            padding: 40px 30px;
-            transition: transform 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
+  /* ─── TOGGLE SECTION ─── */
+  #toggle-section {
+    padding: 6rem 0;
+    text-align: center;
+    position: relative;
+  }
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    transition: color var(--transition-slow);
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 700;
+    color: var(--fg);
+    margin-bottom: 1.2rem;
+    transition: font-family var(--transition-slow), color var(--transition-slow);
+  }
+  .section-desc {
+    max-width: 480px;
+    margin: 0 auto 3.5rem;
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.8;
+    transition: color var(--transition-slow);
+  }
 
-        .case-card:hover {
-            transform: translateY(-5px);
-        }
+  /* THE BIG TOGGLE */
+  .mode-toggle-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 60px;
+    padding: 0.5rem 0.5rem;
+    position: relative;
+  }
+  .mode-btn {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.75rem 2rem;
+    border-radius: 50px;
+    border: none;
+    background: transparent;
+    cursor: none;
+    color: var(--muted);
+    transition: all var(--transition-med);
+    position: relative; z-index: 1;
+  }
+  .mode-btn.active {
+    background: var(--accent);
+    color: var(--bg);
+    font-weight: 500;
+    transition: background var(--transition-slow);
+  }
+  .mode-btn .btn-icon { margin-right: 0.5rem; }
 
-        .card-number {
-            font-size: 0.8rem;
-            opacity: 0.5;
-            margin-bottom: 15px;
-            display: block;
-            letter-spacing: 1px;
-        }
+  /* MODE STATUS STRIP */
+  .mode-status {
+    display: flex; align-items: center; justify-content: center;
+    gap: 0.6rem;
+    margin-top: 2rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+    transition: color var(--transition-slow);
+  }
+  .mode-status .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent);
+    animation: blink 2s infinite;
+    transition: background var(--transition-slow);
+  }
 
-        .card-title {
-            font-size: 1.3rem;
-            margin-bottom: 15px;
-            font-weight: bold;
-        }
+  /* ─── PROJECTS SECTION ─── */
+  #projects {
+    padding: 3rem 0 8rem;
+  }
 
-        .card-desc {
-            font-size: 1rem;
-            line-height: 1.6;
-            opacity: 0.9;
-        }
+  /* Mode description banner */
+  .mode-banner {
+    border-left: 2px solid var(--accent);
+    padding: 1.5rem 2rem;
+    margin-bottom: 4rem;
+    background: var(--card-bg);
+    transition: border-color var(--transition-slow), background var(--transition-slow);
+    border-radius: 0 4px 4px 0;
+  }
+  .mode-banner h3 {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    color: var(--fg);
+    transition: font-family var(--transition-slow), color var(--transition-slow);
+  }
+  .mode-banner p {
+    color: var(--muted);
+    font-size: 0.9rem;
+    max-width: 560px;
+    transition: color var(--transition-slow);
+  }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+  /* PROJECTS GRID */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .grid { grid-template-columns: 1fr; }
-            .controls { flex-direction: column; gap: 15px; border-radius: 10px; }
-        }
-    </style>
+  .project-card {
+    background: var(--bg);
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+    cursor: none;
+    transition: background var(--transition-med);
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  .project-card.visible {
+    opacity: 1; transform: translateY(0);
+    transition: opacity 0.6s ease, transform 0.6s ease, background var(--transition-med);
+  }
+  .project-card:hover { background: var(--card-bg); }
+
+  .project-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--transition-med), background var(--transition-slow);
+  }
+  .project-card:hover::after { transform: scaleX(1); }
+
+  .card-number {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    margin-bottom: 1.2rem;
+    display: flex; align-items: center; gap: 0.5rem;
+    transition: color var(--transition-slow);
+  }
+  .card-number::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    max-width: 60px;
+  }
+
+  .card-tag {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 0.2rem 0.6rem;
+    border-radius: 2px;
+    margin-bottom: 1rem;
+    opacity: 0.7;
+    transition: color var(--transition-slow), border-color var(--transition-slow);
+  }
+
+  .card-title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--fg);
+    margin-bottom: 0.8rem;
+    line-height: 1.25;
+    transition: font-family var(--transition-slow), color var(--transition-slow);
+  }
+
+  .card-body {
+    color: var(--muted);
+    font-size: 0.88rem;
+    line-height: 1.75;
+    margin-bottom: 1.8rem;
+    transition: color var(--transition-slow);
+  }
+
+  .card-meta {
+    display: flex; align-items: center; gap: 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    padding-top: 1.2rem;
+    transition: color var(--transition-slow);
+  }
+  .card-meta .metric {
+    display: flex; flex-direction: column; gap: 0.2rem;
+  }
+  .card-meta .metric-value {
+    font-size: 1.1rem;
+    color: var(--fg);
+    font-weight: 500;
+    transition: color var(--transition-slow);
+  }
+
+  .card-arrow {
+    margin-left: auto;
+    width: 28px; height: 28px;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted);
+    font-size: 0.8rem;
+    transition: all var(--transition-fast);
+  }
+  .project-card:hover .card-arrow {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: rotate(45deg);
+  }
+
+  /* ─── ABOUT STRIP ─── */
+  #about {
+    padding: 6rem 0;
+    border-top: 1px solid var(--border);
+  }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 5rem;
+    align-items: start;
+  }
+  .about-left .label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    transition: color var(--transition-slow);
+  }
+  .about-left h2 {
+    font-family: var(--font-display);
+    font-size: 2.4rem;
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--fg);
+    transition: font-family var(--transition-slow), color var(--transition-slow);
+  }
+  .about-right p {
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.85;
+    margin-bottom: 1.5rem;
+    transition: color var(--transition-slow);
+  }
+  .about-right p:last-child { margin-bottom: 0; }
+  .about-right strong { color: var(--fg); font-weight: 500; transition: color var(--transition-slow); }
+
+  .skills-row {
+    display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 2rem;
+  }
+  .skill-chip {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.9rem;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    color: var(--muted);
+    transition: all var(--transition-fast), color var(--transition-slow), border-color var(--transition-slow);
+  }
+  .skill-chip:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2.5rem 0;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .footer-name {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    color: var(--muted);
+    transition: font-family var(--transition-slow), color var(--transition-slow);
+  }
+  .footer-note {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    opacity: 0.5;
+    transition: color var(--transition-slow);
+  }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulse {
+    0%,100% { transform: translateY(-50%) scale(1); opacity: 0.6; }
+    50%      { transform: translateY(-50%) scale(1.08); opacity: 1; }
+  }
+  @keyframes blink {
+    0%,100% { opacity: 1; } 50% { opacity: 0.3; }
+  }
+
+  /* ─── MODE TRANSITION: science grid lines ─── */
+  body.science-mode .projects-grid {
+    background: repeating-linear-gradient(
+      90deg,
+      rgba(56,232,192,0.03) 0px,
+      transparent 1px,
+      transparent 40px
+    ), var(--border);
+  }
+
+  /* Stagger cards */
+  .project-card:nth-child(1) { transition-delay: 0.05s; }
+  .project-card:nth-child(2) { transition-delay: 0.12s; }
+  .project-card:nth-child(3) { transition-delay: 0.19s; }
+  .project-card:nth-child(4) { transition-delay: 0.26s; }
+
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--accent); transition: background var(--transition-slow); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    .projects-grid { grid-template-columns: 1fr; }
+    .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    nav { padding: 1.2rem 1.5rem; }
+    .nav-links { display: none; }
+    .container { padding: 0 1.5rem; }
+    .hero-inner { padding: 0 1.5rem; }
+    footer { flex-direction: column; gap: 0.8rem; text-align: center; }
+    .hero-shape { display: none; }
+  }
+</style>
 </head>
 <body>
 
-    <div class="container">
-        <header>
-            <h1 id="mainTitle">The Synthesis.</h1>
-            <p class="intro-text" id="mainDesc">
-                Marketing without data is poetry. Marketing without narrative is a spreadsheet. <br>
-                I am a Product Marketing Manager who builds at the intersection of both.
-            </p>
-            
-            <div class="controls">
-                <button class="toggle-btn" id="btnArt" onclick="switchTheme('art')">Explore The Art</button>
-                <button class="toggle-btn" id="btnNeutral" onclick="switchTheme('neutral')">Reset</button>
-                <button class="toggle-btn" id="btnScience" onclick="switchTheme('science')">Explore The Science</button>
-            </div>
-        </header>
+<!-- CUSTOM CURSOR -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
 
-        <div id="panelNeutral" class="content-panel active">
-            <p style="text-align: center; opacity: 0.6;">Select a framework above to view my methodologies.</p>
-        </div>
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">YN<span>.</span></div>
+  <ul class="nav-links">
+    <li><a href="#toggle-section">Work</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="mailto:you@email.com">Contact</a></li>
+  </ul>
+</nav>
 
-        <div id="panelArt" class="content-panel">
-            <h2 class="section-title">Empathy. Resonance. Story.</h2>
-            <div class="grid">
-                <div class="case-card">
-                    <span class="card-number">01 // DIAGNOSTICS</span>
-                    <div class="card-title">Emotional Diagnostics</div>
-                    <div class="card-desc">[Replace with your work: Led qualitative interviews to uncover emotional triggers and built psychographic empathy grids.]</div>
-                </div>
-                <div class="case-card">
-                    <span class="card-number">02 // SYNTHESIS</span>
-                    <div class="card-title">Narrative Synthesis</div>
-                    <div class="card-desc">[Replace with your work: Distilled complex SaaS features into an emotionally resonant value proposition, lowering cognitive load.]</div>
-                </div>
-                <div class="case-card">
-                    <span class="card-number">03 // BRANDING</span>
-                    <div class="card-title">Brand Synchronization</div>
-                    <div class="card-desc">[Replace with your work: Architected an omni-platform launch campaign, ensuring consistent narrative across PR and collateral.]</div>
-                </div>
-                <div class="case-card">
-                    <span class="card-number">04 // ENABLEMENT</span>
-                    <div class="card-title">Story-Driven Enablement</div>
-                    <div class="card-desc">[Replace with your work: Restructured sales pitch decks around narrative arcs to define the threat vector and position the solution.]</div>
-                </div>
-            </div>
-        </div>
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-shape"></div>
+  <div class="hero-inner">
+    <p class="hero-eyebrow">Product Marketing Manager</p>
+    <h1 class="hero-headline">
+      Marketing is both<br />
+      <em>art and science.</em>
+    </h1>
+    <p class="hero-sub">
+      I build narratives that move people and systems that move markets. 
+      This is the work — some felt, some measured, all intentional.
+    </p>
+    <div class="hero-cta-group">
+      <a href="#toggle-section" class="btn btn-primary">Explore the work</a>
+      <a href="#about" class="btn btn-ghost">About me</a>
+    </div>
+  </div>
+</section>
 
-        <div id="panelScience" class="content-panel">
-            <h2 class="section-title">Hypothesis. Experiment. Metric.</h2>
-            <div class="grid">
-                <div class="case-card">
-                    <span class="card-number">SYS.01</span>
-                    <div class="card-title">Discovery & Telemetry</div>
-                    <div class="card-desc">[Replace with your work: Tracked behavioral analytics to identify drop-offs, optimized onboarding flow, and increased activation.]</div>
-                </div>
-                <div class="case-card">
-                    <span class="card-number">SYS.02</span>
-                    <div class="card-title">The GTM Equation</div>
-                    <div class="card-desc">[Replace with your work: Leveraged the Van Westendorp model to analyze Willingness-to-Pay and restructure pricing tiers.]</div>
-                </div>
-                <div class="case-card">
-                    <span class="card-number">SYS.03</span>
-                    <div class="card-title">Actionable Enablement</div>
-                    <div class="card-desc">[Replace with your work: Armed SDRs with high-signal intent paths based on quantitative engagement scores to lower CAC.]</div>
-                </div>
-                <div class="case-card">
-                    <span class="card-number">SYS.04</span>
-                    <div class="card-title">Conversion Diagnostics</div>
-                    <div class="card-desc">[Replace with your work: Built a behavioral health matrix to detect churn signals and A/B tested save mechanisms.]</div>
-                </div>
-            </div>
-        </div>
+<!-- TOGGLE SECTION -->
+<section id="toggle-section">
+  <div class="container">
+    <p class="section-label">Choose your lens</p>
+    <h2 class="section-title">How do you see marketing?</h2>
+    <p class="section-desc">
+      The same campaigns look different depending on how you're reading them. 
+      Toggle between the two lenses to explore the work differently.
+    </p>
+
+    <div class="mode-toggle-wrap">
+      <button class="mode-btn active" id="art-btn" onclick="setMode('art')">
+        <span class="btn-icon">◐</span> Marketing as Art
+      </button>
+      <button class="mode-btn" id="sci-btn" onclick="setMode('science')">
+        <span class="btn-icon">⊕</span> Marketing as Science
+      </button>
     </div>
 
-    <script>
-        const body = document.body;
-        const panels = {
-            neutral: document.getElementById('panelNeutral'),
-            art: document.getElementById('panelArt'),
-            science: document.getElementById('panelScience')
-        };
-        const buttons = {
-            neutral: document.getElementById('btnNeutral'),
-            art: document.getElementById('btnArt'),
-            science: document.getElementById('btnScience')
-        };
-        const mainTitle = document.getElementById('mainTitle');
-        const mainDesc = document.getElementById('mainDesc');
+    <div class="mode-status">
+      <span class="dot"></span>
+      <span id="mode-label">Viewing through the art lens</span>
+    </div>
+  </div>
+</section>
 
-        // Set initial active button
-        buttons.neutral.classList.add('active');
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="container">
 
-        function switchTheme(theme) {
-            // Reset everything
-            body.className = '';
-            Object.values(panels).forEach(p => p.classList.remove('active'));
-            Object.values(buttons).forEach(b => b.classList.remove('active'));
+    <!-- ART PROJECTS -->
+    <div id="art-projects">
+      <div class="mode-banner">
+        <h3>Craft, Feeling &amp; Narrative</h3>
+        <p>
+          These projects lead with emotion, story, and the intangible qualities 
+          that make marketing resonate on a human level — where the work feels like something.
+        </p>
+      </div>
+      <div class="projects-grid">
+        <!-- Card 1 -->
+        <div class="project-card" data-card>
+          <div class="card-number">01 / 04</div>
+          <span class="card-tag">Brand Story</span>
+          <h3 class="card-title">Project Title One</h3>
+          <p class="card-body">
+            A short description of this project goes here. What was the challenge? 
+            What emotional truth were you trying to land? What did the work feel like?
+          </p>
+          <div class="card-meta">
+            <div class="metric">
+              <span>Channel</span>
+              <span class="metric-value">—</span>
+            </div>
+            <div class="metric">
+              <span>Type</span>
+              <span class="metric-value">—</span>
+            </div>
+            <div class="card-arrow">↗</div>
+          </div>
+        </div>
+        <!-- Card 2 -->
+        <div class="project-card" data-card>
+          <div class="card-number">02 / 04</div>
+          <span class="card-tag">Campaign</span>
+          <h3 class="card-title">Project Title Two</h3>
+          <p class="card-body">
+            A short description of this project goes here. 
+            What made it distinctive? What creative choices shaped the work?
+          </p>
+          <div class="card-meta">
+            <div class="metric">
+              <span>Channel</span>
+              <span class="metric-value">—</span>
+            </div>
+            <div class="metric">
+              <span>Type</span>
+              <span class="metric-value">—</span>
+            </div>
+            <div class="card-arrow">↗</div>
+          </div>
+        </div>
+        <!-- Card 3 -->
+        <div class="project-card" data-card>
+          <div class="card-number">03 / 04</div>
+          <span class="card-tag">Messaging</span>
+          <h3 class="card-title">Project Title Three</h3>
+          <p class="card-body">
+            A short description of this project goes here. 
+            How did you find the right tone? What made the copy sing?
+          </p>
+          <div class="card-meta">
+            <div class="metric">
+              <span>Channel</span>
+              <span class="metric-value">—</span>
+            </div>
+            <div class="metric">
+              <span>Type</span>
+              <span class="metric-value">—</span>
+            </div>
+            <div class="card-arrow">↗</div>
+          </div>
+        </div>
+        <!-- Card 4 -->
+        <div class="project-card" data-card>
+          <div class="card-number">04 / 04</div>
+          <span class="card-tag">Positioning</span>
+          <h3 class="card-title">Project Title Four</h3>
+          <p class="card-body">
+            A short description of this project goes here. 
+            What intuition guided the strategy? What made it land?
+          </p>
+          <div class="card-meta">
+            <div class="metric">
+              <span>Channel</span>
+              <span class="metric-value">—</span>
+            </div>
+            <div class="metric">
+              <span>Type</span>
+              <span class="metric-value">—</span>
+            </div>
+            <div class="card-arrow">↗</div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-            // Apply new state
-            buttons[theme].classList.add('active');
-            panels[theme].classList.add('active');
+    <!-- SCIENCE PROJECTS -->
+    <div id="sci-projects" style="display:none">
+      <div class="mode-banner">
+        <h3>Data, Systems &amp; Proof</h3>
+        <p>
+          These projects lead with evidence, frameworks, and measurable outcomes — 
+          where the work can be explained, replicated, and defended with numbers.
+        </p>
+      </div>
+      <div class="projects-grid">
+        <!-- Card 1 -->
+        <div class="project-card" data-card>
+          <div class="card-number">01 / 04</div>
+          <span class="card-tag">GTM Strategy</span>
+          <h3 class="card-title">Project Title Five</h3>
+          <p class="card-body">
+            A short description of this project goes here. 
+            What was the hypothesis? How did you test it? What did the data reveal?
+          </p>
+          <div class="card-meta">
+            <div class="metric">
+              <span>Impact</span>
+              <span class="metric-value">—</span>
+            </div>
+            <div class="metric">
+              <span>Scale</span>
+              <span class="metric-value">—</span>
+            </div>
+            <div class="card-arrow">↗</div>
+          </div>
+        </div>
+        <!-- Card 2 -->
+        <div class="project-card" data-card>
+          <div class="card-number">02 / 04</div>
+          <span class="card-tag">Segmentation</span>
+          <h3 class="card-title">Project Title Six</h3>
+          <p class="card-body">
+            A short description of this project goes here. 
+            What framework did you build? How did it scale across segments?
+          </p>
+          <div class="card-meta">
+            <div class="metric">
+              <span>Impact</span>
+              <span class="metric-value">—</span>
+            </div>
+            <div class="metric">
+              <span>Scale</span>
+              <span class="metric-value">—</span>
+            </div>
+            <div class="card-arrow">↗</div>
+          </div>
+        </div>
+        <!-- Card 3 -->
+        <div class="project-card" data-card>
+          <div class="card-number">03 / 04</div>
+          <span class="card-tag">Experimentation</span>
+          <h3 class="card-title">Project Title Seven</h3>
+          <p class="card-body">
+            A short description of this project goes here. 
+            What did you A/B test? What surprised you? What changed because of it?
+          </p>
+          <div class="card-meta">
+            <div class="metric">
+              <span>Impact</span>
+              <span class="metric-value">—</span>
+            </div>
+            <div class="metric">
+              <span>Scale</span>
+              <span class="metric-value">—</span>
+            </div>
+            <div class="card-arrow">↗</div>
+          </div>
+        </div>
+        <!-- Card 4 -->
+        <div class="project-card" data-card>
+          <div class="card-number">04 / 04</div>
+          <span class="card-tag">Analytics</span>
+          <h3 class="card-title">Project Title Eight</h3>
+          <p class="card-body">
+            A short description of this project goes here. 
+            How did you turn raw data into insight? What decision did it drive?
+          </p>
+          <div class="card-meta">
+            <div class="metric">
+              <span>Impact</span>
+              <span class="metric-value">—</span>
+            </div>
+            <div class="metric">
+              <span>Scale</span>
+              <span class="metric-value">—</span>
+            </div>
+            <div class="card-arrow">↗</div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-            if (theme === 'science') {
-                body.classList.add('theme-science');
-                mainTitle.innerText = "The Science.";
-                mainDesc.innerHTML = "Hypothesis. Experiment. Metric. Prove the value.";
-            } else if (theme === 'art') {
-                body.classList.add('theme-art');
-                mainTitle.innerText = "The Art.";
-                mainDesc.innerHTML = "Empathy. Narrative. Perception. Shape the mind.";
-            } else {
-                mainTitle.innerText = "The Synthesis.";
-                mainDesc.innerHTML = "Marketing without data is poetry. Marketing without narrative is a spreadsheet. <br>I am a Product Marketing Manager who builds at the intersection of both.";
-            }
-        }
-    </script>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-left">
+        <p class="label">About</p>
+        <h2>The person behind the work</h2>
+      </div>
+      <div class="about-right">
+        <p>
+          <strong>Your name here.</strong> A brief, punchy line about who you are and 
+          what kind of marketer you consider yourself to be. Make it yours — confident and direct.
+        </p>
+        <p>
+          A second paragraph giving a bit more context: where you've worked, 
+          what kinds of products you've gone to market with, what you believe 
+          about the craft of product marketing. Something that reveals your POV.
+        </p>
+        <p>
+          Optionally, a line about what you're working on now or what you're looking for next.
+        </p>
+        <div class="skills-row">
+          <span class="skill-chip">Positioning</span>
+          <span class="skill-chip">Messaging</span>
+          <span class="skill-chip">GTM Strategy</span>
+          <span class="skill-chip">Competitive Intel</span>
+          <span class="skill-chip">Launch Planning</span>
+          <span class="skill-chip">Segmentation</span>
+          <span class="skill-chip">Sales Enablement</span>
+          <span class="skill-chip">Customer Research</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="container">
+  <span class="footer-name">Your Name</span>
+  <span class="footer-note">Product Marketing · 2025</span>
+</footer>
+
+<!-- ─── SCRIPTS ─── -->
+<script>
+  // CURSOR
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  function animateCursor() {
+    rx += (mx - rx) * 0.18;
+    ry += (my - ry) * 0.18;
+    cursor.style.left = mx + 'px';
+    cursor.style.top  = my + 'px';
+    ring.style.left   = rx + 'px';
+    ring.style.top    = ry + 'px';
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+  document.querySelectorAll('a, button, .project-card').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.width = '18px';
+      cursor.style.height = '18px';
+      ring.style.width = '52px';
+      ring.style.height = '52px';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.width = '10px';
+      cursor.style.height = '10px';
+      ring.style.width = '36px';
+      ring.style.height = '36px';
+    });
+  });
+
+  // MODE TOGGLE
+  let currentMode = 'art';
+  function setMode(mode) {
+    if (mode === currentMode) return;
+    currentMode = mode;
+
+    const body = document.body;
+    const artProjects = document.getElementById('art-projects');
+    const sciProjects = document.getElementById('sci-projects');
+    const artBtn = document.getElementById('art-btn');
+    const sciBtn = document.getElementById('sci-btn');
+    const modeLabel = document.getElementById('mode-label');
+
+    // Fade out cards
+    document.querySelectorAll('[data-card]').forEach(c => c.classList.remove('visible'));
+
+    setTimeout(() => {
+      if (mode === 'science') {
+        body.classList.add('science-mode');
+        artProjects.style.display = 'none';
+        sciProjects.style.display = 'block';
+        artBtn.classList.remove('active');
+        sciBtn.classList.add('active');
+        modeLabel.textContent = 'Viewing through the science lens';
+      } else {
+        body.classList.remove('science-mode');
+        artProjects.style.display = 'block';
+        sciProjects.style.display = 'none';
+        artBtn.classList.add('active');
+        sciBtn.classList.remove('active');
+        modeLabel.textContent = 'Viewing through the art lens';
+      }
+      // Stagger card entries
+      setTimeout(() => {
+        document.querySelectorAll('[data-card]').forEach((c, i) => {
+          setTimeout(() => c.classList.add('visible'), i * 80);
+        });
+      }, 50);
+    }, 200);
+  }
+
+  // SCROLL ANIMATIONS
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const cards = e.target.querySelectorAll('[data-card]');
+        cards.forEach((c, i) => setTimeout(() => c.classList.add('visible'), i * 80));
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.projects-grid').forEach(g => observer.observe(g));
+
+  // Initial art card load
+  setTimeout(() => {
+    document.querySelectorAll('#art-projects [data-card]').forEach((c, i) => {
+      setTimeout(() => c.classList.add('visible'), 300 + i * 80);
+    });
+  }, 500);
+</script>
 </body>
 </html>
