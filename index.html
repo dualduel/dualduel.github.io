@@ -44,8 +44,16 @@
         }
 
         /* --- HEADER --- */
-        h1 { font-size: 2rem; margin-bottom: 5px; font-weight: normal; transition: var(--transition-speed); }
-        .intro-text { font-size: 1.2rem; margin-bottom: 40px; }
+        h1 { 
+            font-size: 2rem; 
+            margin-bottom: 5px; 
+            font-weight: normal; 
+            transition: var(--transition-speed); 
+        }
+        .intro-text { 
+            font-size: 1.2rem; 
+            margin-bottom: 40px; 
+        }
 
         /* --- TOGGLE UI --- */
         .toggle-container {
@@ -66,46 +74,96 @@
             transition: opacity 0.3s;
         }
         
-        .toggle-label.active { opacity: 1; font-weight: bold; text-decoration: underline; }
+        .toggle-label.active { 
+            opacity: 1; 
+            font-weight: bold; 
+            text-decoration: underline; 
+        }
 
         /* Custom Switch */
-        .switch { position: relative; display: inline-block; width: 60px; height: 34px; }
-        .switch input { opacity: 0; width: 0; height: 0; }
+        .switch { 
+            position: relative; 
+            display: inline-block; 
+            width: 60px; 
+            height: 34px; 
+        }
+        .switch input { 
+            opacity: 0; 
+            width: 0; 
+            height: 0; 
+        }
         .slider {
-            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
-            background-color: transparent; border: 2px solid var(--text-color);
-            transition: .4s; border-radius: 34px;
+            position: absolute; 
+            cursor: pointer; 
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            bottom: 0;
+            background-color: transparent; 
+            border: 2px solid var(--text-color);
+            transition: .4s; 
+            border-radius: 34px;
         }
         .slider:before {
-            position: absolute; content: ""; height: 22px; width: 22px; left: 4px; bottom: 4px;
-            background-color: var(--text-color); transition: .4s; border-radius: 50%;
+            position: absolute; 
+            content: ""; 
+            height: 22px; 
+            width: 22px; 
+            left: 4px; 
+            bottom: 4px;
+            background-color: var(--text-color); 
+            transition: .4s; 
+            border-radius: 50%;
         }
-        input:checked + .slider:before { transform: translateX(26px); }
+        input:checked + .slider:before { 
+            transform: translateX(26px); 
+        }
 
         /* --- CONTENT BLOCKS --- */
-        .content-section { display: none; animation: fadeIn 0.8s; }
-        .content-section.active { display: block; }
+        .content-section { 
+            display: none; 
+            animation: fadeIn 0.8s; 
+        }
+        .content-section.active { 
+            display: block; 
+        }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(10px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
 
-        .case-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px; }
-        @media (max-width: 600px) { .case-grid { grid-template-columns: 1fr; } }
+        .case-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 20px; 
+            margin-top: 30px; 
+        }
+        @media (max-width: 600px) { 
+            .case-grid { grid-template-columns: 1fr; } 
+        }
 
         .case-card {
             border: 1px solid var(--text-color);
             padding: 20px;
             transition: transform 0.2s;
         }
-        .case-card:hover { transform: translateY(-5px); }
-        .case-title { font-weight: bold; margin-bottom: 10px; font-size: 1.1rem; }
+        .case-card:hover { 
+            transform: translateY(-5px); 
+        }
+        .case-title { 
+            font-weight: bold; 
+            margin-bottom: 10px; 
+            font-size: 1.1rem; 
+        }
     </style>
 </head>
 <body>
 
     <h1 id="mainTitle">The Synthesis.</h1>
     <div class="intro-text" id="mainDesc">
-        Marketing without data is just poetry. Marketing without narrative is just a spreadsheet. <br>
-        I am a Product Marketing Manager who builds at the intersection of both.
+        Marketing without data is poetry. Marketing without narrative is a spreadsheet. <br>
+        I build at the intersection. See my work through the lens you prefer.
     </div>
 
     <div class="toggle-container">
@@ -120,54 +178,54 @@
     </div>
 
     <div id="contentNeutral" class="content-section active">
-        <p>Use the toggle above to explore my work.</p>
-        <p>&darr;</p>
+        <p style="text-align: center;">Use the toggle above to explore my work.</p>
+        <p style="text-align: center;">&darr;</p>
     </div>
 
     <div id="contentArt" class="content-section">
-        <h2>The Art of Perception</h2>
-        <p>Products don't win on features; they win on how they make the user feel. This is where positioning, storytelling, and empathy take the wheel.</p>
+        <h2>Empathy. Resonance. Story.</h2>
+        <p>How I shape perception.</p>
         
         <div class="case-grid">
             <div class="case-card">
-                <div class="case-title">01. The Narrative Arc</div>
-                <div>Rewriting the core messaging house for [Project Name] to focus on loss aversion rather than feature lists.</div>
+                <div class="case-title">01. Emotional Diagnostics</div>
+                <div>[Your actual project summary goes here. Example: Led qualitative interviews to uncover emotional triggers and built psychographic empathy grids.]</div>
             </div>
             <div class="case-card">
-                <div class="case-title">02. Emotional Resonance</div>
-                <div>Deep-dive qualitative user interviews that uncovered the true "Jobs to be Done" for [Target Audience].</div>
+                <div class="case-title">02. Narrative Synthesis</div>
+                <div>[Your actual project summary goes here. Example: Distilled complex SaaS features into an emotionally resonant value proposition, lowering cognitive load.]</div>
             </div>
             <div class="case-card">
-                <div class="case-title">03. The Blank Page</div>
-                <div>Long-form copywriting and manifesto design that redefined our category.</div>
+                <div class="case-title">03. Brand Synchronization</div>
+                <div>[Your actual project summary goes here. Example: Architected an omni-platform launch campaign, ensuring consistent narrative across PR and collateral.]</div>
             </div>
             <div class="case-card">
-                <div class="case-title">04. Visual Synthesis</div>
-                <div>Aligning brand aesthetics with product reality during the Go-To-Market launch of [Feature].</div>
+                <div class="case-title">04. Story-Driven Enablement</div>
+                <div>[Your actual project summary goes here. Example: Restructured sales pitch decks around narrative arcs to define the threat vector and position the solution.]</div>
             </div>
         </div>
     </div>
 
     <div id="contentScience" class="content-section">
-        <h2>The Science of Growth</h2>
-        <p>Empathy is a hypothesis; metrics are the proof. This is where telemetry, segmentation, and rigorous testing validate the narrative.</p>
+        <h2>Hypothesis. Experiment. Metric.</h2>
+        <p>How I build the framework for growth.</p>
         
         <div class="case-grid">
             <div class="case-card">
-                <div class="case-title">01. Data Telemetry</div>
-                <div>Funnel optimization that identified a 22% drop-off in onboarding, solved via A/B testing copy.</div>
+                <div class="case-title">01. Discovery & Telemetry</div>
+                <div>[Your actual project summary goes here. Example: Tracked behavioral analytics to identify drop-offs, optimized onboarding flow, and increased activation.]</div>
             </div>
             <div class="case-card">
-                <div class="case-title">02. Market Sizing</div>
-                <div>Quantitative TAM/SAM/SOM analysis to justify pivoting our Go-To-Market strategy toward Enterprise.</div>
+                <div class="case-title">02. The GTM Equation</div>
+                <div>[Your actual project summary goes here. Example: Leveraged the Van Westendorp model to analyze Willingness-to-Pay and restructure pricing tiers.]</div>
             </div>
             <div class="case-card">
-                <div class="case-title">03. Pricing Elasticity</div>
-                <div>Running structured willingness-to-pay (WTP) surveys to restructure our packaging tiers.</div>
+                <div class="case-title">03. Actionable Enablement</div>
+                <div>[Your actual project summary goes here. Example: Armed SDRs with high-signal intent paths based on quantitative engagement scores to lower CAC.]</div>
             </div>
             <div class="case-card">
-                <div class="case-title">04. Churn Diagnostics</div>
-                <div>Building a predictive behavioral model to trigger retention campaigns before users churned.</div>
+                <div class="case-title">04. Conversion Diagnostics</div>
+                <div>[Your actual project summary goes here. Example: Built a behavioral health matrix to detect churn signals and A/B tested save mechanisms.]</div>
             </div>
         </div>
     </div>
@@ -219,13 +277,13 @@
                 contentScience.classList.add('active');
                 labelScience.classList.add('active');
                 mainTitle.innerText = "The Science.";
-                mainDesc.innerHTML = "Hypothesis. Experiment. Metric. Prove the value.";
+                mainDesc.innerHTML = "Hypothesis. Experiment. Metric. How I build the framework for growth.";
             } else if (theme === 'art') {
                 body.className = 'theme-art';
                 contentArt.classList.add('active');
                 labelArt.classList.add('active');
                 mainTitle.innerText = "The Art.";
-                mainDesc.innerHTML = "Empathy. Narrative. Perception. Shape the mind.";
+                mainDesc.innerHTML = "Empathy. Resonance. Story. How I shape perception.";
             }
         }
     </script>
